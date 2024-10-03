@@ -1,37 +1,15 @@
-{% extends "base.html" %}
-
-{% block title %}Validador - Sistema de Segurança{% endblock %}
-
-{% block content %}
-<div class="text-center">
-    <h2>Validador</h2>
-    <div id="message-container" class="mt-4">
-        <p>Nenhuma mensagem recebida ainda.</p>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel - Sistema de Segurança</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h2>Painel de {{ session['role'].capitalize() }}</h2>
+        <p>Bem-vindo ao sistema de segurança!</p>
     </div>
-    <audio id="notification-sound" src="/static/sound/notification.mp3"></audio>
-</div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    // Checa por novas mensagens a cada 5 segundos
-    setInterval(() => {
-        fetch('/check_new_messages')
-        .then(response => response.json())
-        .then(data => {
-            if (data.new_message) {
-                document.getElementById('message-container').innerHTML = `<p>${data.message}</p>`;
-                const sound = document.getElementById('notification-sound');
-                sound.play();
-
-                if (Notification.permission === "granted") {
-                    new Notification("Nova mensagem do Acionador", {
-                        body: data.message,
-                        icon: '/static/icons/notification-icon.png'
-                    });
-                }
-            }
-        });
-    }, 5000);
-</script>
-{% endblock %}
+</body>
+</html>

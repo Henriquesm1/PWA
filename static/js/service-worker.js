@@ -4,8 +4,7 @@ const urlsToCache = [
   '/static/css/style.css',
   '/static/js/service-worker.js',
   '/static/icons/icon-192x192.png',
-  '/static/icons/icon-512x512.png',
-  '/static/sound/notification.mp3'
+  '/static/icons/icon-512x512.png'
 ];
 
 // Instala o service worker e adiciona os arquivos ao cache
