@@ -1,15 +1,38 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel - Sistema de Segurança</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <div class="dashboard-container">
-        <h2>Painel de {{ session['role'].capitalize() }}</h2>
-        <p>Bem-vindo ao sistema de segurança!</p>
+{% extends "base.html" %}
+
+{% block title %}Painel do Validador{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Painel do Validador</h2>
+    <p>Bem-vindo ao sistema de segurança!</p>
+
+    <!-- Área do chat -->
+    <div id="chat-container">
+        <h3>Chat com Acionador</h3>
+        <div id="chat-box" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;">
+            <!-- Mensagens aparecerão aqui -->
+        </div>
+        <input type="text" id="chat-input" placeholder="Digite sua mensagem..." style="width: 80%;">
+        <button id="send-message">Enviar</button>
     </div>
-</body>
-</html>
+</div>
+
+<script>
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    // Enviar mensagem para o acionador
+    document.getElementById('send-message').addEventListener('click', function() {
+        var message = document.getElementById('chat-input').value;
+        socket.emit('message', {msg: message});
+        document.getElementById('chat-input').value = '';  // Limpa o campo de entrada
+    });
+
+    // Receber mensagens do acionador
+    socket.on('message', function(data) {
+        var chatBox = document.getElementById('chat-box');
+        chatBox.innerHTML += '<p>' + data.msg + '</p>';
+        chatBox.scrollTop = chatBox.scrollHeight;  // Rola para a última mensagem
+    });
+</script>
+{% endblock %}

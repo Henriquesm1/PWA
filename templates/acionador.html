@@ -9,25 +9,38 @@
 
     <!-- Botão de Acionamento -->
     <button id="btn-acionamento" class="btn btn-red">Acionar</button>
+
+    <!-- Área do chat que será exibida após o acionamento -->
+    <div id="chat-container" style="display:none;">
+        <h3>Chat com Validador</h3>
+        <div id="chat-box" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;">
+            <!-- Mensagens aparecerão aqui -->
+        </div>
+        <input type="text" id="chat-input" placeholder="Digite sua mensagem..." style="width: 80%;">
+        <button id="send-message">Enviar</button>
+    </div>
 </div>
 
 <script>
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    // Exibir chat após o acionamento
     document.getElementById('btn-acionamento').addEventListener('click', function() {
-        fetch('/send_message_to_validador', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message: 'Acionamento disparado pelo acionador!' })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status) {
-                alert('Acionamento enviado com sucesso!');
-            } else {
-                alert('Erro ao enviar acionamento.');
-            }
-        });
+        document.getElementById('chat-container').style.display = 'block';
+    });
+
+    // Enviar mensagem para o validador
+    document.getElementById('send-message').addEventListener('click', function() {
+        var message = document.getElementById('chat-input').value;
+        socket.emit('message', {msg: message});
+        document.getElementById('chat-input').value = '';  // Limpa o campo de entrada
+    });
+
+    // Receber mensagens do validador
+    socket.on('message', function(data) {
+        var chatBox = document.getElementById('chat-box');
+        chatBox.innerHTML += '<p>' + data.msg + '</p>';
+        chatBox.scrollTop = chatBox.scrollHeight;  // Rola para a última mensagem
     });
 </script>
 {% endblock %}
