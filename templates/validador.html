@@ -18,8 +18,16 @@
     </div>
 </div>
 
+<!-- Inclua o Socket.IO -->
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+
 <script>
     var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    // Receber notificação de acionamento e iniciar chat
+    socket.on('acionamento', function(data) {
+        alert('Acionador iniciou o chat: ' + data.msg);
+    });
 
     // Enviar mensagem para o acionador
     document.getElementById('send-message').addEventListener('click', function() {
