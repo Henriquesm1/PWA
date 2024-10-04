@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # Configuração do Flask e do banco de dados
 app.config['SECRET_KEY'] = 'secret!'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:senha@localhost/pwa'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Brinks@123@localhost/pwa'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 socketio = SocketIO(app)
